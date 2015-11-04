@@ -37,9 +37,9 @@ interface UUID {
     make(version: Number, ...params: any[]): UUID;
 
     /*  parsing  */
-    parse(string: String): UUID;
+    parse(string: String, separator: String): UUID;
 
     /*  formatting  */
-    format(): String;
+    format(separator: String): String;
 }
 

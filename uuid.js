@@ -541,36 +541,37 @@
     };
 
     /*  API method: format UUID into usual textual representation  */
-    UUID.prototype.format = function () {
+    UUID.prototype.format = function(separator) {
         var str = Array(32);
-        a2hs(this,  0,  3, false, str,  0);
-        str[ 8] = "-";
-        a2hs(this,  4,  5, false, str,  9);
-        str[13] = "-";
-        a2hs(this,  6,  7, false, str, 14);
-        str[18] = "-";
-        a2hs(this,  8,  9, false, str, 19);
-        str[23] = "-";
+        a2hs(this, 0, 3, false, str, 0);
+        str[8] = separator || "-";
+        a2hs(this, 4, 5, false, str, 9);
+        str[13] = separator || "-";
+        a2hs(this, 6, 7, false, str, 14);
+        str[18] = separator || "-";
+        a2hs(this, 8, 9, false, str, 19);
+        str[23] = separator || "-";
         a2hs(this, 10, 15, false, str, 24);
         return str.join("");
     };
 
     /*  API method: parse UUID from usual textual representation  */
-    UUID.prototype.parse = function (str) {
+    UUID.prototype.parse = function(str, separator) {
         var map = {
-            "nil":     "00000000-0000-0000-0000-000000000000",
-            "ns:DNS":  "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
-            "ns:URL":  "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
-            "ns:OID":  "6ba7b812-9dad-11d1-80b4-00c04fd430c8",
-            "ns:X500": "6ba7b814-9dad-11d1-80b4-00c04fd430c8"
+          "nil": "00000000-0000-0000-0000-000000000000",
+          "ns:DNS": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+          "ns:URL": "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
+          "ns:OID": "6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+          "ns:X500": "6ba7b814-9dad-11d1-80b4-00c04fd430c8"
         };
         if (map[str] !== undefined)
-            str = map[str];
-        hs2a(str,  0,  7, this,  0);
-        hs2a(str,  9, 12, this,  4);
-        hs2a(str, 14, 17, this,  6);
-        hs2a(str, 19, 22, this,  8);
-        hs2a(str, 24, 35, this, 10);
+          str = map[str];
+        var sepLen = separator ? separator.length : 1;
+        hs2a(str, 0, 7, this, 0);
+        hs2a(str, 8 + sepLen, 11 + sepLen, this, 4);
+        hs2a(str, 12 + sepLen * 2, 15 + sepLen * 2, this, 6);
+        hs2a(str, 16 + sepLen * 3, 19 + sepLen * 3, this, 8);
+        hs2a(str, 20 + sepLen * 4, 31 + sepLen * 4, this, 10);
         return this;
     };
 
